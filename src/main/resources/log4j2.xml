@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuratio>
+
+	<Appenders>
+		<!-- Appender used for printing logging message -->
+		<File name="FileAppender" filename="logs/error.log">
+			<PatternLayout 
+				pattern="%d{yyyy-MMM-dd HH:mm:ss a} [%t] %-5level %logger{36} -%msg%n" />
+		</File>
+		<Console name="OutputAppender">
+			<PatternLayout 
+				pattern="%msg%n" />
+		</Console>
+		
+	</Appenders>
+	<Loggers>
+		<!-- FileAppender used to append log to a file -->
+		<Root level="ERROR">
+			<AppenderRef ref="FileAppender" />
+		</Root>
+		<Logger name="com.wander.api" level="INFO" additivity="false">
+			<AppenderRef ref="OutputAppender" />
+		</Logger>
+		<Logger name="com.wander.utility" level="ERROR" additivity="false">
+			<AppenderRef ref="FileAppender" />
+		</Logger>
+		
+	</Loggers>
+</Configuratio>
