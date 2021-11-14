@@ -1,0 +1,47 @@
+package com.wander.service;
+
+import java.security.NoSuchAlgorithmException;
+
+import javax.transaction.Transactional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.wander.dto.UserDTO;
+import com.wander.entity.User;
+import com.wander.exception.WanderLustException;
+import com.wander.repository.UserRepository;
+import com.wander.utility.HashingUtility;
+
+@Service(value = "userService")
+@Transactional
+public class UserServiceImpl implements UserService{
+	@Autowired
+	private UserRepository userRepository;
+	
+	public UserDTO validateUser(String contactNumber, String password) throws WanderLustException{
+		User user = userRepository.findUserByContactNumber(contactNumber);
+		if(user==null) 
+			throw new WanderLustException("UserService.INVALID_CREDENTIALS");
+		String dbPassword = user.getPassword();
+		if(dbPassword!= null) {
+			try {
+				String hashedPassword = HashingUtility.getHashValue(password);
+				if(dbPassword.equals(hashedPassword)) {
+					UserDTO userDto = new UserDTO();
+					userDto.setUserId(user.getUserId());
+					userDto.setUserName(user.getUserName());
+					userDto.setEmailId(user.getEmailId());
+					userDto.setContactNumber(user.getContactNumber());
+					return userDto;
+				}
+				else
+					throw new WanderLustException("UserService.INVALID_CREDENTIALS");
+			}
+			catch (NoSuchAlgorithmException exception) {
+				throw new WanderLustException("UserService.HASH_FUNCTION_EXCEPTION");
+			}
+		}
+		throw new WanderLustException("UserService.INVALID_CREDENTIALS");
+	}
+}
