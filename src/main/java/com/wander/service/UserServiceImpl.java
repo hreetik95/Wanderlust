@@ -44,4 +44,24 @@ public class UserServiceImpl implements UserService{
 		}
 		throw new WanderLustException("UserService.INVALID_CREDENTIALS");
 	}
+	public String registerUser(UserDTO user) throws WanderLustException{
+		if(userRepository.findUserByContactNumber(user.getContactNumber())!=null)
+			throw new WanderLustException("UserService.CONTACT_NUMBER_ALREADY_EXISTS");
+		try {
+			String hashedPassword = HashingUtility.getHashValue(user.getPassword());
+			User usr = new User();
+			usr.setUserId(user.getUserId());
+			usr.setContactNumber(user.getContactNumber());
+			usr.setEmailId(user.getEmailId());
+			usr.setPassword(hashedPassword);
+			usr.setUserName(user.getUserName());
+			userRepository.save(usr);
+			return usr.getUserName();
+			
+		}
+		catch (NoSuchAlgorithmException exception) {
+			throw new WanderLustException("UserService.HASH_FUNCTION_EXCEPTION");
+		}
+		
+	}
 }

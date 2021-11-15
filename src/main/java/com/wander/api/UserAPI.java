@@ -25,7 +25,7 @@ public class UserAPI {
 	@Autowired
 	private Environment environment;
 	
-	@PostMapping(value = "/userLogin")
+	@PostMapping(value = "/login")
 	public ResponseEntity<UserDTO> validateUser(@RequestBody UserDTO user) throws WanderLustException{
 		try {
 			UserDTO userDto = userService.validateUser(user.getContactNumber(), user.getPassword());
@@ -33,9 +33,20 @@ public class UserAPI {
 		}
 		catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,environment.getProperty(e.getMessage()),e );
-		}
-		
+		}	
 	}
 	
-
+	@PostMapping(value = "/register")
+	public ResponseEntity<String> registerUser(@RequestBody UserDTO user) throws WanderLustException{
+		try {
+			String name = userService.registerUser(user);
+			String msg = environment.getProperty("UserAPI.REGISTER_USER_SUCCESS1")+ name + 
+					environment.getProperty("UserAPI.REGISTER_USER_SUCCESS2");
+			return new ResponseEntity<String>(msg,HttpStatus.OK);
+		}
+		catch (Exception e) {
+			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,environment.getProperty(e.getMessage()),e);
+		}
+	}
+	
 }

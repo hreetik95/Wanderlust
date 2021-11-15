@@ -2,12 +2,22 @@ package com.wander.dto;
 
 import java.time.LocalDate;
 
+import javax.validation.constraints.Future;
+import javax.validation.constraints.FutureOrPresent;
+import javax.validation.constraints.NotNull;
+
 public class BookingDTO {
 
 	private Integer bookingId;
+	@NotNull(message = "{checkIn.absent}")
+	@FutureOrPresent(message = "{checkIn.mustBeFutureOrPresent}")
 	private LocalDate checkIn;
+	@NotNull(message = "{checkOut.absent}")
+	@Future(message = "{checkOut.mustBeFuture}")
 	private LocalDate checkOut;
+	@NotNull(message = "noOfPeople.absent")
 	private Integer noOfPeople;
+	@NotNull(message = "{totalCost.absent}")
 	private Float totalCost;
 	private LocalDate timeOfBooking;
 	private DestinationDTO destination;

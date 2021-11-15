@@ -5,4 +5,5 @@ import com.wander.exception.WanderLustException;
 
 public interface UserService {
 	public UserDTO validateUser(String contactNumber,String password) throws WanderLustException;
+	public String registerUser(UserDTO user) throws WanderLustException;
 }
