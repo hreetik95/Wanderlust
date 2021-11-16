@@ -4,10 +4,10 @@ import javax.validation.constraints.Pattern;
 public class UserDTO {
 	
 	private Integer userId;
-	@Pattern(regexp = "([A-Za-z])+(\\s[A-Za-z])+*", message = "{invalid.customer.format}")
+	@Pattern(regexp = "([A-Za-z])+(\\s[A-Za-z]+)*", message = "{invalid.customer.format}")
 	private String userName;
 	@NotNull(message = "{email.absent}")
-	@Pattern(regexp = "([A-za-z])+@[A-Za-z]+([.com])", message = "{invalid.email.format}")
+	@Pattern(regexp = "^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$", message = "{invalid.email.format}")
 	private String emailId;
 	@Pattern(regexp = "[6-9][0-9]{9}", message = "{}")
 	private String contactNumber;

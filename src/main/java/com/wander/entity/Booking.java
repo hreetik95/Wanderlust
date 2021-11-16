@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name="BOOKING")
 public class Booking {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer bookingId;
 	private LocalDate checkIn;
 	private LocalDate checkOut;

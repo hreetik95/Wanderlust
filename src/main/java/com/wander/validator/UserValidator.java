@@ -4,9 +4,9 @@ import com.wander.dto.UserDTO;
 import com.wander.exception.WanderLustException;
 
 public class UserValidator {
-	public static void validateUserForLogin(String contactNumber, String password) throws WanderLustException{
-		if(!validateContactNumber(contactNumber)) {
-			throw new WanderLustException("UserValidator.INVALID_CONTACT_NUMBER_FORMAT");
+	public static void validateUserForLogin(String emailId, String password) throws WanderLustException{
+		if(!validateContactNumber(emailId)) {
+			throw new WanderLustException("UserValidator.INVALID_EMAILID");
 		}
 		if(!validatePassword(password))
 			throw new WanderLustException("UserValidator.INVALID_PASSWORD_FORMAT");

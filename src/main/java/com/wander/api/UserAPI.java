@@ -1,5 +1,7 @@
 package com.wander.api;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -21,14 +23,13 @@ import com.wander.service.UserService;
 public class UserAPI {
 	@Autowired
 	private UserService userService;
-	
 	@Autowired
 	private Environment environment;
 	
 	@PostMapping(value = "/login")
 	public ResponseEntity<UserDTO> validateUser(@RequestBody UserDTO user) throws WanderLustException{
 		try {
-			UserDTO userDto = userService.validateUser(user.getContactNumber(), user.getPassword());
+			UserDTO userDto = userService.validateUser(user.getEmailId(), user.getPassword());
 			return new ResponseEntity<>(userDto,HttpStatus.OK);
 		}
 		catch (Exception e) {
@@ -37,16 +38,16 @@ public class UserAPI {
 	}
 	
 	@PostMapping(value = "/register")
-	public ResponseEntity<String> registerUser(@RequestBody UserDTO user) throws WanderLustException{
+	public ResponseEntity<String> registerUser(@Valid @RequestBody UserDTO user) throws WanderLustException{
 		try {
 			String name = userService.registerUser(user);
 			String msg = environment.getProperty("UserAPI.REGISTER_USER_SUCCESS1")+ name + 
 					environment.getProperty("UserAPI.REGISTER_USER_SUCCESS2");
 			return new ResponseEntity<String>(msg,HttpStatus.OK);
 		}
+		
 		catch (Exception e) {
 			throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,environment.getProperty(e.getMessage()),e);
 		}
 	}
-	
 }

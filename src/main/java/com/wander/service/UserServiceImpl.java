@@ -18,13 +18,14 @@ import com.wander.utility.HashingUtility;
 public class UserServiceImpl implements UserService{
 	@Autowired
 	private UserRepository userRepository;
-	
-	public UserDTO validateUser(String contactNumber, String password) throws WanderLustException{
-		User user = userRepository.findUserByContactNumber(contactNumber);
+	@Override
+	public UserDTO validateUser(String emailId, String password) throws WanderLustException{
+		User user = userRepository.findUserByEmailId(emailId);
 		if(user==null) 
 			throw new WanderLustException("UserService.INVALID_CREDENTIALS");
 		String dbPassword = user.getPassword();
 		if(dbPassword!= null) {
+			
 			try {
 				String hashedPassword = HashingUtility.getHashValue(password);
 				if(dbPassword.equals(hashedPassword)) {
@@ -44,9 +45,11 @@ public class UserServiceImpl implements UserService{
 		}
 		throw new WanderLustException("UserService.INVALID_CREDENTIALS");
 	}
+	
+	@Override
 	public String registerUser(UserDTO user) throws WanderLustException{
-		if(userRepository.findUserByContactNumber(user.getContactNumber())!=null)
-			throw new WanderLustException("UserService.CONTACT_NUMBER_ALREADY_EXISTS");
+		if(userRepository.findUserByEmailId(user.getEmailId())!=null)
+			throw new WanderLustException("UserService.EMAILID_ALREADY_EXISTS");
 		try {
 			String hashedPassword = HashingUtility.getHashValue(user.getPassword());
 			User usr = new User();
